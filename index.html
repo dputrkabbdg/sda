@@ -118,6 +118,28 @@
       box-shadow:0 8px 20px rgba(15,23,42,.04);
     }
 
+    .top-link-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:14px 18px;
+      border-radius:999px;
+      background:linear-gradient(135deg,#0f4c8a,#2567aa);
+      color:#fff;
+      font-size:13px;
+      font-weight:800;
+      white-space:nowrap;
+      text-decoration:none;
+      box-shadow:0 10px 24px rgba(15,76,138,.20);
+      transition:.18s ease;
+    }
+
+    .top-link-btn:hover{
+      transform:translateY(-1px);
+      filter:brightness(1.03);
+    }
+
     .wrap{
       max-width:1880px;
       margin:0 auto;
@@ -565,6 +587,7 @@
       .panel-body{padding:22px 18px 22px}
       .brand-title{font-size:18px}
       .brand-subtitle{white-space:normal}
+      .top-link-btn{width:100%;justify-content:center}
     }
   </style>
 </head>
@@ -580,6 +603,14 @@
       </div>
 
       <div class="topbar-actions">
+        <a
+          class="top-link-btn"
+          href="https://docs.google.com/spreadsheets/d/1ObcjNLABT8jXBl2y-zKu6RTynqCffdW3hs2rQkI2_l0/edit?gid=1897588645#gid=1897588645"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Akses Database
+        </a>
         <div class="top-chip">Koneksi Spreadsheet Aktif</div>
         <div class="top-chip" id="topLastUpdate">Update: -</div>
       </div>
