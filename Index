@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Usulan SIPURI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#eef3f8;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --primary:#0b3b6e;
+      --primary2:#134d8a;
+      --success:#0f766e;
+      --warn:#b45309;
+      --danger:#b91c1c;
+      --line:#d9e2ec;
+      --shadow:0 16px 40px rgba(15,23,42,.08);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(11,59,110,.08), transparent 20%),
+        linear-gradient(180deg, #edf3f9 0%, #f4f7fb 100%);
+    }
+    .wrap{max-width:1400px;margin:0 auto;padding:20px}
+    .hero{
+      background:linear-gradient(135deg,var(--primary),var(--primary2));
+      color:#fff;
+      border-radius:28px;
+      padding:26px;
+      box-shadow:var(--shadow);
+      margin-bottom:20px;
+    }
+    .hero h1{margin:0 0 8px;font-size:32px}
+    .hero p{margin:0;opacity:.95;line-height:1.6}
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:14px;
+      margin-bottom:20px;
+    }
+    .stat{
+      background:#fff;
+      border-radius:20px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(15,23,42,.05);
+    }
+    .stat .label{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase}
+    .stat .value{font-size:32px;font-weight:800;margin-top:10px}
+    .layout{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:20px;
+    }
+    .card{
+      background:var(--card);
+      border-radius:24px;
+      padding:22px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(15,23,42,.05);
+    }
+    .card h2{margin:0 0 8px}
+    .card p{margin:0 0 16px;color:var(--muted);line-height:1.6}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
+    .full{grid-column:1/-1}
+    label{display:block;margin-bottom:7px;font-size:13px;font-weight:700;color:#334155}
+    input,select,textarea{
+      width:100%;
+      padding:13px 14px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      font:inherit;
+      background:#fff;
+    }
+    input:focus,select:focus,textarea:focus{
+      outline:none;
+      border-color:#1d65ae;
+      box-shadow:0 0 0 4px rgba(29,101,174,.12);
+    }
+    .note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+    .btns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+    button{
+      border:none;
+      border-radius:14px;
+      padding:13px 18px;
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff}
+    .btn-green{background:linear-gradient(135deg,#0f766e,#14b8a6);color:#fff}
+    .btn-light{background:#fff;border:1px solid var(--line);color:#0f172a}
+    .status{margin-top:14px;font-size:14px;font-weight:700}
+    .ok{color:var(--success)}
+    .warn{color:var(--warn)}
+    .err{color:var(--danger)}
+    .preview-list{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    .preview-list img{
+      width:100%;
+      aspect-ratio:1/1;
+      object-fit:cover;
+      border-radius:14px;
+      border:1px solid #e2e8f0;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+    }
+    th,td{
+      padding:12px 10px;
+      border-bottom:1px solid #eef2f7;
+      text-align:left;
+      vertical-align:top;
+    }
+    th{font-size:12px;text-transform:uppercase;color:var(--muted)}
+    .tag{
+      display:inline-block;
+      background:#eef6ff;
+      color:#134d8a;
+      padding:5px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+    }
+    .loader{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.28);
+      align-items:center;
+      justify-content:center;
+      z-index:999;
+    }
+    .loader.active{display:flex}
+    .loader-box{
+      background:#fff;
+      padding:18px 22px;
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      font-weight:700;
+    }
+    @media (max-width:1100px){
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .layout{grid-template-columns:1fr}
+    }
+    @media (max-width:720px){
+      .wrap{padding:14px}
+      .grid{grid-template-columns:1fr}
+      .full{grid-column:auto}
+      .stats{grid-template-columns:1fr}
+      .preview-list{grid-template-columns:repeat(2,1fr)}
+      .btns{flex-direction:column}
+      button{width:100%}
+      .hero h1{font-size:24px}
+    }
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader">
+    <div class="loader-box">Memproses data...</div>
+  </div>
+
+  <div class="wrap">
+    <section class="hero">
+      <h1>Dashboard Usulan SIPURI</h1>
+      <p>
+        Form input lapangan dengan GPS, multi-foto, dan dashboard monitoring realtime yang terhubung langsung ke Google Spreadsheet.
+      </p>
+    </section>
+
+    <section class="stats" id="statsWrap">
+      <div class="stat">
+        <div class="label">Total Data</div>
+        <div class="value">0</div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="card">
+        <h2>Form Input Usulan</h2>
+        <p>Silakan isi data berikut. Untuk foto, bisa pilih lebih dari satu sekaligus.</p>
+
+        <form id="formInput">
+          <div class="grid">
+            <div>
+              <label>Nama DI</label>
+              <input id="namaDi" required>
+            </div>
+            <div>
+              <label>UPTD</label>
+              <select id="uptd" required></select>
+            </div>
+
+            <div>
+              <label>Sumber Air</label>
+              <input id="sumberAir">
+            </div>
+            <div>
+              <label>Usulan Kegiatan</label>
+              <select id="usulan"></select>
+            </div>
+
+            <div>
+              <label>IP (1-3) Awal</label>
+              <select id="ipAwal"></select>
+            </div>
+            <div>
+              <label>IP (1-3) Menjadi</label>
+              <select id="ipMenjadi"></select>
+            </div>
+
+            <div>
+              <label>Luas Area M2</label>
+              <input id="luas" type="number">
+            </div>
+            <div>
+              <label>Kecamatan</label>
+              <input id="kecamatan">
+            </div>
+
+            <div>
+              <label>Desa</label>
+              <input id="desa">
+            </div>
+            <div>
+              <label>Kondisi Jaringan</label>
+              <select id="kondisi"></select>
+            </div>
+
+            <div class="full">
+              <label>Koordinat</label>
+              <input id="koordinat" readonly placeholder="Klik tombol Ambil Koordinat">
+              <div class="note">Disarankan aktifkan GPS/lokasi browser di handphone.</div>
+            </div>
+
+            <div>
+              <label>Nama P3A</label>
+              <input id="namaP3A">
+            </div>
+            <div>
+              <label>Ketua P3A</label>
+              <input id="ketua">
+            </div>
+
+            <div class="full">
+              <label>Nomor HP P3A</label>
+              <input id="hp" type="tel">
+            </div>
+
+            <div class="full">
+              <label>Foto (bisa lebih dari satu)</label>
+              <input id="foto" type="file" accept="image/*" multiple>
+              <div class="note">Bisa pilih beberapa foto sekaligus. Semua foto akan masuk ke satu folder untuk satu entri data.</div>
+              <div class="preview-list" id="previewList"></div>
+            </div>
+          </div>
+
+          <div class="btns">
+            <button type="button" class="btn-green" onclick="ambilKoordinat()">Ambil Koordinat</button>
+            <button type="submit" class="btn-primary">Simpan Data</button>
+            <button type="button" class="btn-light" onclick="resetForm()">Reset</button>
+          </div>
+
+          <div class="status" id="statusBox"></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Monitoring Realtime</h2>
+        <p>Data terbaru akan diperbarui otomatis.</p>
+        <div class="note" id="lastUpdate">Update: -</div>
+        <br>
+        <div style="overflow:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama DI</th>
+                <th>UPTD</th>
+                <th>Usulan</th>
+                <th>Kecamatan</th>
+              </tr>
+            </thead>
+            <tbody id="recentBody">
+              <tr><td colspan="5">Memuat...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // GANTI dengan URL Web App Apps Script kamu
+    const API_URL = 'https://script.google.com/macros/s/AKfycby9U-Rr5iYwcF2fMcC3e6yxTYCRc0FZ_39rkUkezngm5U9o05Z5icyysm-Qjqvfusvx/exec';
+    const AUTO_REFRESH_MS = 10000;
+
+    let selectedPhotos = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadInitData();
+      document.getElementById('formInput').addEventListener('submit', submitForm);
+      document.getElementById('foto').addEventListener('change', handlePhotoChange);
+      setInterval(loadDashboard, AUTO_REFRESH_MS);
+    });
+
+    function showLoader(show = true) {
+      document.getElementById('loader').classList.toggle('active', show);
+    }
+
+    function setStatus(msg, type = 'ok') {
+      const box = document.getElementById('statusBox');
+      box.className = 'status ' + type;
+      box.textContent = msg || '';
+    }
+
+    async function loadInitData() {
+      try {
+        const res = await fetch(`${API_URL}?action=getInitData`);
+        const data = await res.json();
+
+        if (!data.success) {
+          setStatus(data.message || 'Gagal memuat data awal.', 'err');
+          return;
+        }
+
+        fillSelect('uptd', data.dropdowns.uptd || [], 'Pilih UPTD');
+        fillSelect('usulan', data.dropdowns.usulan || [], 'Pilih Usulan Kegiatan');
+        fillSelect('ipAwal', data.dropdowns.ipAwal || [], 'Pilih IP Awal');
+        fillSelect('ipMenjadi', data.dropdowns.ipMenjadi || [], 'Pilih IP Menjadi');
+        fillSelect('kondisi', data.dropdowns.kondisi || [], 'Pilih Kondisi Jaringan');
+
+        renderDashboard(data.dashboard);
+      } catch (err) {
+        setStatus('Gagal memuat data awal: ' + err.message, 'err');
+      }
+    }
+
+    async function loadDashboard() {
+      try {
+        const res = await fetch(`${API_URL}?action=getDashboard`);
+        const data = await res.json();
+        if (data.success) renderDashboard(data);
+      } catch (err) {}
+    }
+
+    function renderDashboard(data) {
+      renderStats(data);
+      renderRecent(data.recentData || []);
+      document.getElementById('lastUpdate').textContent = 'Update: ' + (data.lastUpdate || '-');
+    }
+
+    function renderStats(data) {
+      const statsWrap = document.getElementById('statsWrap');
+      const uptd = data.uptd || {};
+      const keys = Object.keys(uptd);
+
+      let html = `
+        <div class="stat">
+          <div class="label">Total Data</div>
+          <div class="value">${escapeHtml(String(data.total || 0))}</div>
+        </div>
+      `;
+
+      keys.forEach(k => {
+        html += `
+          <div class="stat">
+            <div class="label">${escapeHtml(k)}</div>
+            <div class="value">${escapeHtml(String(uptd[k] || 0))}</div>
+          </div>
+        `;
+      });
+
+      statsWrap.innerHTML = html;
+    }
+
+    function renderRecent(rows) {
+      const body = document.getElementById('recentBody');
+      if (!rows.length) {
+        body.innerHTML = `<tr><td colspan="5">Belum ada data.</td></tr>`;
+        return;
+      }
+
+      body.innerHTML = rows.map(r => `
+        <tr>
+          <td>${escapeHtml(r.no || '')}</td>
+          <td>${escapeHtml(r.namaDi || '')}</td>
+          <td><span class="tag">${escapeHtml(r.uptd || '-')}</span></td>
+          <td>${escapeHtml(r.usulan || '')}</td>
+          <td>${escapeHtml(r.kecamatan || '')}</td>
+        </tr>
+      `).join('');
+    }
+
+    function fillSelect(id, items, placeholder) {
+      const el = document.getElementById(id);
+      el.innerHTML = `<option value="">${escapeHtml(placeholder)}</option>` +
+        items.map(v => `<option value="${escapeAttr(v)}">${escapeHtml(v)}</option>`).join('');
+    }
+
+    function ambilKoordinat() {
+      if (!navigator.geolocation) {
+        setStatus('Browser tidak mendukung geolocation.', 'err');
+        return;
+      }
+
+      setStatus('Mengambil koordinat...', 'warn');
+
+      navigator.geolocation.getCurrentPosition(
+        pos => {
+          document.getElementById('koordinat').value = `${pos.coords.latitude}, ${pos.coords.longitude}`;
+          setStatus('Koordinat berhasil diambil.', 'ok');
+        },
+        err => {
+          let msg = 'Gagal mengambil koordinat.';
+          if (err.code === 1) msg = 'Izin lokasi ditolak.';
+          if (err.code === 2) msg = 'Lokasi tidak tersedia.';
+          if (err.code === 3) msg = 'Permintaan lokasi timeout.';
+          setStatus(msg, 'err');
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+      );
+    }
+
+    async function handlePhotoChange(e) {
+      const files = Array.from(e.target.files || []);
+      selectedPhotos = files;
+      renderPreview(files);
+      setStatus(files.length ? `${files.length} foto dipilih.` : '', 'ok');
+    }
+
+    function renderPreview(files) {
+      const box = document.getElementById('previewList');
+      box.innerHTML = '';
+
+      files.forEach(file => {
+        const img = document.createElement('img');
+        img.alt = file.name;
+
+        const reader = new FileReader();
+        reader.onload = ev => img.src = ev.target.result;
+        reader.readAsDataURL(file);
+
+        box.appendChild(img);
+      });
+    }
+
+    async function submitForm(e) {
+      e.preventDefault();
+
+      const namaDi = document.getElementById('namaDi').value.trim();
+      const uptd = document.getElementById('uptd').value.trim();
+      const usulan = document.getElementById('usulan').value.trim();
+
+      if (!namaDi || !uptd || !usulan) {
+        setStatus('Nama DI, UPTD, dan Usulan Kegiatan wajib diisi.', 'err');
+        return;
+      }
+
+      showLoader(true);
+      setStatus('');
+
+      try {
+        const photosBase64 = await Promise.all(
+          selectedPhotos.map(async file => ({
+            name: file.name,
+            dataUrl: await compressImage(file, 1600, 0.82)
+          }))
+        );
+
+        const payload = {
+          action: 'submit',
+          namaDi,
+          uptd,
+          sumberAir: document.getElementById('sumberAir').value.trim(),
+          usulan,
+          ipAwal: document.getElementById('ipAwal').value.trim(),
+          ipMenjadi: document.getElementById('ipMenjadi').value.trim(),
+          luas: document.getElementById('luas').value.trim(),
+          kecamatan: document.getElementById('kecamatan').value.trim(),
+          desa: document.getElementById('desa').value.trim(),
+          kondisi: document.getElementById('kondisi').value.trim(),
+          koordinat: document.getElementById('koordinat').value.trim(),
+          namaP3A: document.getElementById('namaP3A').value.trim(),
+          ketua: document.getElementById('ketua').value.trim(),
+          hp: document.getElementById('hp').value.trim(),
+          photos: photosBase64
+        };
+
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (!data.success) {
+          throw new Error(data.message || 'Gagal menyimpan data.');
+        }
+
+        setStatus(`Data berhasil disimpan. ${data.uploadedPhotos || 0} foto terupload.`, 'ok');
+        resetForm(false);
+        renderDashboard(data.dashboard);
+      } catch (err) {
+        setStatus('Gagal menyimpan: ' + err.message, 'err');
+      } finally {
+        showLoader(false);
+      }
+    }
+
+    function resetForm(clearStatus = true) {
+      document.getElementById('formInput').reset();
+      document.getElementById('previewList').innerHTML = '';
+      selectedPhotos = [];
+      if (clearStatus) setStatus('');
+    }
+
+    function compressImage(file, maxSize = 1600, quality = 0.82) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = evt => {
+          const img = new Image();
+
+          img.onload = () => {
+            let { width, height } = img;
+
+            if (width > height && width > maxSize) {
+              height = Math.round(height * (maxSize / width));
+              width = maxSize;
+            } else if (height >= width && height > maxSize) {
+              width = Math.round(width * (maxSize / height));
+              height = maxSize;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+
+          img.onerror = () => reject(new Error('Gagal membaca gambar.'));
+          img.src = evt.target.result;
+        };
+
+        reader.onerror = () => reject(new Error('Gagal membaca file.'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function escapeAttr(str) {
+      return String(str).replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
