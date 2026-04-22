@@ -152,7 +152,7 @@
       border-radius:38px;
       background:linear-gradient(135deg,#184d87 0%, #1e5a97 100%);
       color:#fff;
-      padding:38px 36px;
+      padding:34px 30px;
       box-shadow:var(--shadow);
       margin-bottom:28px;
       min-height:220px;
@@ -182,10 +182,24 @@
       background:rgba(255,255,255,.08);
     }
 
-    .hero h1{
+    .hero-body{
       position:relative;
       z-index:1;
-      margin:0 0 16px;
+      display:grid;
+      grid-template-columns:minmax(0, 1.25fr) minmax(420px, .95fr);
+      gap:24px;
+      align-items:stretch;
+    }
+
+    .hero-left{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      min-width:0;
+    }
+
+    .hero h1{
+      margin:0 0 14px;
       font-size:clamp(34px,4vw,56px);
       line-height:1.04;
       font-weight:900;
@@ -194,14 +208,134 @@
     }
 
     .hero p{
-      position:relative;
-      z-index:1;
       margin:0;
-      max-width:1120px;
-      font-size:19px;
-      line-height:1.8;
+      max-width:860px;
+      font-size:18px;
+      line-height:1.75;
       color:rgba(255,255,255,.95);
       font-weight:500;
+    }
+
+    .hero-right{
+      display:flex;
+      align-items:stretch;
+      justify-content:flex-end;
+    }
+
+    .resume-grid{
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      align-content:start;
+    }
+
+    .resume-mini-card{
+      background:rgba(114, 161, 232, 0.18);
+      border:1px solid rgba(255,255,255,.20);
+      border-radius:16px;
+      padding:12px 14px;
+      backdrop-filter:blur(8px);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.10);
+      min-height:80px;
+    }
+
+    .resume-mini-card.primary{
+      background:rgba(255,255,255,.14);
+      border-color:rgba(255,255,255,.24);
+    }
+
+    .resume-mini-card.success{
+      background:rgba(24, 173, 137, 0.16);
+    }
+
+    .resume-mini-card.warn{
+      background:rgba(242, 161, 29, 0.18);
+    }
+
+    .resume-mini-card.purple{
+      background:rgba(173, 138, 242, 0.18);
+    }
+
+    .resume-mini-card.teal{
+      background:rgba(44, 199, 187, 0.16);
+    }
+
+    .resume-mini-card.dark{
+      background:rgba(15, 23, 42, 0.20);
+    }
+
+    .resume-mini-card.wide{
+      grid-column:1/-1;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      min-height:76px;
+    }
+
+    .resume-mini-label{
+      font-size:12px;
+      font-weight:900;
+      line-height:1.3;
+      text-transform:none;
+      color:#f8fbff;
+      opacity:.96;
+      margin-bottom:8px;
+    }
+
+    .resume-mini-value{
+      font-size:24px;
+      font-weight:900;
+      line-height:1.1;
+      color:#fff;
+      word-break:break-word;
+    }
+
+    .resume-mini-sub{
+      font-size:12px;
+      color:rgba(255,255,255,.88);
+      font-weight:700;
+      margin-top:4px;
+    }
+
+    .resume-progress{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      width:100%;
+    }
+
+    .resume-progress-main{
+      min-width:124px;
+      text-align:right;
+    }
+
+    .resume-progress-main .resume-mini-value{
+      font-size:28px;
+    }
+
+    .progress-wrap{
+      flex:1;
+      min-width:0;
+    }
+
+    .progress-bar{
+      width:100%;
+      height:12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.18);
+      overflow:hidden;
+      box-shadow:inset 0 1px 2px rgba(0,0,0,.10);
+      margin-top:8px;
+    }
+
+    .progress-fill{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:linear-gradient(90deg,#6ee7b7,#34d399,#22c55e);
+      transition:width .45s ease;
     }
 
     .stats{
@@ -536,6 +670,12 @@
 
     @media (max-width:1400px){
       .stats{grid-template-columns:repeat(3,1fr)}
+      .hero-body{
+        grid-template-columns:1fr;
+      }
+      .hero-right{
+        justify-content:flex-start;
+      }
     }
 
     @media (max-width:1100px){
@@ -564,7 +704,7 @@
 
       .wrap{padding:16px}
       .hero{
-        padding:28px 22px;
+        padding:24px 18px;
         border-radius:28px;
         min-height:auto;
       }
@@ -577,6 +717,25 @@
       .hero p{
         font-size:15px;
         line-height:1.7;
+      }
+
+      .resume-grid{
+        grid-template-columns:1fr;
+      }
+
+      .resume-mini-card.wide{
+        grid-column:auto;
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .resume-progress{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .resume-progress-main{
+        text-align:left;
       }
 
       .stats{grid-template-columns:1fr}
@@ -623,7 +782,63 @@
 
   <div class="wrap">
     <section class="hero">
-      <h1>Dashboard Monitoring Kondisi Daerah Irigasi</h1>
+      <div class="hero-body">
+        <div class="hero-left">
+          <h1>Dashboard Monitoring Kondisi Daerah Irigasi</h1>
+          <p>
+            Dashboard monitoring kondisi daerah irigasi Kabupaten Bandung yang terhubung langsung
+            dengan input survey lapangan dan resume ringkasan data utama.
+          </p>
+        </div>
+
+        <div class="hero-right">
+          <div class="resume-grid" id="resumeCards">
+            <div class="resume-mini-card primary">
+              <div class="resume-mini-label">Total DI Kab.Bandung</div>
+              <div class="resume-mini-value">0</div>
+            </div>
+
+            <div class="resume-mini-card teal">
+              <div class="resume-mini-label">Luas DI Kab.Bandung (Ha)</div>
+              <div class="resume-mini-value">0</div>
+            </div>
+
+            <div class="resume-mini-card success">
+              <div class="resume-mini-label">Sudah Di Survey</div>
+              <div class="resume-mini-value">0</div>
+            </div>
+
+            <div class="resume-mini-card dark">
+              <div class="resume-mini-label">Luas (Ha)</div>
+              <div class="resume-mini-value">0</div>
+            </div>
+
+            <div class="resume-mini-card purple">
+              <div class="resume-mini-label">Perlu Intervensi Pemb Jaringan Promer, Sekunder (Ha)</div>
+              <div class="resume-mini-value">0</div>
+            </div>
+
+            <div class="resume-mini-card warn">
+              <div class="resume-mini-label">Perlu Intervensi Rehabilitasi dan OP (Ha)</div>
+              <div class="resume-mini-value">0</div>
+            </div>
+
+            <div class="resume-mini-card wide primary">
+              <div class="progress-wrap">
+                <div class="resume-mini-label">Persentase Sudah Di Survey terhadap Total DI Kab.Bandung</div>
+                <div class="progress-bar">
+                  <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="resume-mini-sub" id="progressSub">0 dari 0 DI</div>
+              </div>
+              <div class="resume-progress-main">
+                <div class="resume-mini-value" id="progressPercent">0%</div>
+                <div class="resume-mini-sub">Progress Survey</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="stats" id="statsWrap">
@@ -639,7 +854,7 @@
         <div class="panel-body">
           <h2>Form Input Survey</h2>
           <p>
-            Silakan input data sesuai format.Koordinat dan foto dapat diambil langsung dari perangkat lapangan.
+            Silakan input data sesuai format. Koordinat dan foto dapat diambil langsung dari perangkat lapangan.
           </p>
 
           <form id="formInput">
@@ -825,6 +1040,7 @@
     }
 
     function renderDashboard(data) {
+      renderResumeCards(data.resume || {});
       renderStats(data);
       renderRecent(data.recentData || []);
       const updateText = 'Update: ' + (data.lastUpdate || '-');
@@ -832,21 +1048,105 @@
       document.getElementById('topLastUpdate').textContent = updateText;
     }
 
+    function renderResumeCards(resume) {
+      const totalDi = toNumber(resume.totalDiKabBandung);
+      const luasDi = toNumber(resume.luasDiKabBandung);
+      const sudahSurvey = toNumber(resume.sudahDiSurvey);
+      const luasHa = toNumber(resume.luasHa);
+      const pembJaringan = toNumber(resume.perluIntervensiPembJaringan);
+      const rehabOp = toNumber(resume.perluIntervensiRehabilitasiOp);
+      const persentase = clampPercent(toNumber(resume.persentaseSurvey));
+
+      const wrap = document.getElementById('resumeCards');
+      wrap.innerHTML = `
+        <div class="resume-mini-card primary">
+          <div class="resume-mini-label">Total DI Kab.Bandung</div>
+          <div class="resume-mini-value">${formatNumber(totalDi)}</div>
+        </div>
+
+        <div class="resume-mini-card teal">
+          <div class="resume-mini-label">Luas DI Kab.Bandung (Ha)</div>
+          <div class="resume-mini-value">${formatNumber(luasDi)}</div>
+        </div>
+
+        <div class="resume-mini-card success">
+          <div class="resume-mini-label">Sudah Di Survey</div>
+          <div class="resume-mini-value">${formatNumber(sudahSurvey)}</div>
+        </div>
+
+        <div class="resume-mini-card dark">
+          <div class="resume-mini-label">Luas (Ha)</div>
+          <div class="resume-mini-value">${formatNumber(luasHa)}</div>
+        </div>
+
+        <div class="resume-mini-card purple">
+          <div class="resume-mini-label">Perlu Intervensi Pemb Jaringan Promer, Sekunder (Ha)</div>
+          <div class="resume-mini-value">${formatNumber(pembJaringan)}</div>
+        </div>
+
+        <div class="resume-mini-card warn">
+          <div class="resume-mini-label">Perlu Intervensi Rehabilitasi dan OP (Ha)</div>
+          <div class="resume-mini-value">${formatNumber(rehabOp)}</div>
+        </div>
+
+        <div class="resume-mini-card wide primary">
+          <div class="progress-wrap">
+            <div class="resume-mini-label">Persentase Sudah Di Survey terhadap Total DI Kab.Bandung</div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:${persentase.toFixed(2)}%"></div>
+            </div>
+            <div class="resume-mini-sub">${formatNumber(sudahSurvey)} dari ${formatNumber(totalDi)} DI</div>
+          </div>
+          <div class="resume-progress-main">
+            <div class="resume-mini-value">${formatPercent(persentase)}</div>
+            <div class="resume-mini-sub">Progress Survey</div>
+          </div>
+        </div>
+      `;
+    }
+
     function renderStats(data) {
       const statsWrap = document.getElementById('statsWrap');
       const uptd = data.uptd || {};
+      const persenSurvey = formatPercent(toNumber((data.resume || {}).persentaseSurvey));
+
       const orderedCards = [
-        { label: 'Sudah Di Survey', value: data.total || 0, desc: 'Total Data yang sudah Di Survey', cls: 'stat-total' },
-        { label: 'UPTD DAS CISANGKUY', value: uptd['UPTD DAS CISANGKUY'] || 0, desc: 'Jumlah data yang sudah diinput', cls: 'stat-1' },
-        { label: 'UPTD DAS CIWIDEY', value: uptd['UPTD DAS CIWIDEY'] || 0, desc: 'Jumlah data yang sudah diinput', cls: 'stat-2' },
-        { label: 'UPTD DAS CIRASEA', value: uptd['UPTD DAS CIRASEA'] || 0, desc: 'Jumlah data yang sudah diinput', cls: 'stat-3' },
-        { label: 'UPTD DAS CITARIK', value: uptd['UPTD DAS CITARIK'] || 0, desc: 'Jumlah data yang sudah diinput', cls: 'stat-4' }
+        {
+          label: 'Sudah Di Survey',
+          value: data.total || 0,
+          desc: `Total data yang sudah diinput • ${persenSurvey} dari total DI`,
+          cls: 'stat-total'
+        },
+        {
+          label: 'UPTD DAS CISANGKUY',
+          value: uptd['UPTD DAS CISANGKUY'] || 0,
+          desc: 'Jumlah data yang sudah diinput',
+          cls: 'stat-1'
+        },
+        {
+          label: 'UPTD DAS CIWIDEY',
+          value: uptd['UPTD DAS CIWIDEY'] || 0,
+          desc: 'Jumlah data yang sudah diinput',
+          cls: 'stat-2'
+        },
+        {
+          label: 'UPTD DAS CIRASEA',
+          value: uptd['UPTD DAS CIRASEA'] || 0,
+          desc: 'Jumlah data yang sudah diinput',
+          cls: 'stat-3'
+        },
+        {
+          label: 'UPTD DAS CITARIK',
+          value: uptd['UPTD DAS CITARIK'] || 0,
+          desc: 'Jumlah data yang sudah diinput',
+          cls: 'stat-4'
+        }
       ];
 
       statsWrap.innerHTML = orderedCards.map(card => `
         <div class="stat-card ${card.cls}">
           <div class="stat-label">${escapeHtml(card.label)}</div>
-          <div class="stat-value">${escapeHtml(String(card.value))}</div>
+          <div class="stat-value">${escapeHtml(formatNumber(card.value))}</div>
           <div class="stat-desc">${escapeHtml(card.desc)}</div>
         </div>
       `).join('');
@@ -1029,6 +1329,33 @@
         reader.onerror = () => reject(new Error('Gagal membaca file.'));
         reader.readAsDataURL(file);
       });
+    }
+
+    function toNumber(value) {
+      const num = Number(value);
+      return Number.isFinite(num) ? num : 0;
+    }
+
+    function clampPercent(value) {
+      const num = toNumber(value);
+      if (num < 0) return 0;
+      if (num > 100) return 100;
+      return num;
+    }
+
+    function formatNumber(value) {
+      const num = toNumber(value);
+      return new Intl.NumberFormat('id-ID', {
+        maximumFractionDigits: 2
+      }).format(num);
+    }
+
+    function formatPercent(value) {
+      const num = toNumber(value);
+      return new Intl.NumberFormat('id-ID', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(num) + '%';
     }
 
     function escapeHtml(str) {
