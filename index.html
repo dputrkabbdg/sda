@@ -1037,7 +1037,7 @@
       } catch (err) {}
     }
 
-  function renderDashboard(data) {
+ function renderDashboard(data) {
   renderResumeCards(data.resume || {}, data);
   renderStats(data);
   renderRecent(data.recentData || []);
@@ -1047,36 +1047,20 @@
   document.getElementById('topLastUpdate').textContent = updateText;
 }
 
- function renderResumeCards(resume, data = {}) {
+function renderResumeCards(resume, data = {}) {
   const totalDi = toNumber(resume.totalDiKabBandung);
   const luasDi = toNumber(resume.luasDiKabBandung);
   const sudahSurvey = toNumber(resume.sudahDiSurvey || data.total);
   const luasHa = toNumber(resume.luasHa);
-
-  // PRIORITAS:
-  // 1. Ambil hasil hitungan dari Code.gs jika sudah tersedia
-  // 2. Jika belum ada, hitung dari data rows jika backend mengirim rows/allData/data
-  const rows = data.rows || data.allData || data.data || [];
-
-  let pembJaringan = toNumber(resume.perluIntervensiPembJaringan);
-  let rehabOp = toNumber(resume.perluIntervensiRehabilitasiOp);
-
-  if ((!pembJaringan || !rehabOp) && Array.isArray(rows) && rows.length) {
-    const hasil = hitungLuasBerdasarkanKondisi(rows);
-    pembJaringan = hasil.rsRb;
-    rehabOp = hasil.bRr;
-  }
-
+  const pembJaringan = toNumber(resume.perluIntervensiPembJaringan);
+  const rehabOp = toNumber(resume.perluIntervensiRehabilitasiOp);
   const persentase = totalDi > 0 ? clampPercent((sudahSurvey / totalDi) * 100) : 0;
 
   const wrap = document.getElementById('resumeCards');
   wrap.innerHTML = `
-    <a
-      class="resume-card resume-total clickable"
+    <a class="resume-card resume-total clickable"
       href="https://docs.google.com/spreadsheets/d/1ObcjNLABT8jXBl2y-zKu6RTynqCffdW3hs2rQkI2_l0/edit?gid=1565031357#gid=1565031357"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+      target="_blank" rel="noopener noreferrer">
       <div>
         <div class="resume-card-label">Total Data DI Kabupaten Bandung</div>
         <div class="resume-card-value">${formatNumber(totalDi)}</div>
@@ -1153,9 +1137,6 @@ function renderStats(data) {
     }
   ];
 
-  // UPTD DINAMIS:
-  // Semua UPTD dari spreadsheet akan otomatis jadi card,
-  // termasuk UPTD baru seperti "UPTD DAS CIRASEA Kewenangan Provinsi"
   Object.keys(uptd)
     .filter(key => key && key.trim() !== '')
     .sort((a, b) => a.localeCompare(b, 'id'))
@@ -1176,94 +1157,6 @@ function renderStats(data) {
     </div>
   `).join('');
 }
-
-function hitungLuasBerdasarkanKondisi(rows) {
-  let rsRb = 0;
-  let bRr = 0;
-
-  rows.forEach(r => {
-    const kondisi = normalizeKondisi(
-      r.kondisi ||
-      r.kondisiJaringan ||
-      r['Kondisi Jaringan'] ||
-      r['KONDISI JARINGAN'] ||
-      ''
-    );
-
-    const luas = toNumber(
-      r.luas ||
-      r.luasHa ||
-      r['Luas Area Ha'] ||
-      r['LUAS AREA HA'] ||
-      r['Luas'] ||
-      0
-    );
-
-    if (kondisi === 'RS' || kondisi === 'RB') {
-      rsRb += luas;
-    }
-
-    if (kondisi === 'B' || kondisi === 'RR') {
-      bRr += luas;
-    }
-  });
-
-  return { rsRb, bRr };
-}
-
-function normalizeKondisi(value) {
-  return String(value || '')
-    .trim()
-    .toUpperCase()
-    .replace(/\s+/g, '');
-}
-    function renderStats(data) {
-      const statsWrap = document.getElementById('statsWrap');
-      const uptd = data.uptd || {};
-      const persenSurvey = formatPercent(toNumber((data.resume || {}).persentaseSurvey));
-
-      const orderedCards = [
-        {
-          label: 'Sudah Di Survey',
-          value: data.total || 0,
-          desc: `Total data yang sudah diinput • ${persenSurvey} dari total data DI`,
-          cls: 'stat-total'
-        },
-        {
-          label: 'UPTD DAS CISANGKUY',
-          value: uptd['UPTD DAS CISANGKUY'] || 0,
-          desc: 'Jumlah data yang sudah diinput',
-          cls: 'stat-1'
-        },
-        {
-          label: 'UPTD DAS CIWIDEY',
-          value: uptd['UPTD DAS CIWIDEY'] || 0,
-          desc: 'Jumlah data yang sudah diinput',
-          cls: 'stat-2'
-        },
-        {
-          label: 'UPTD DAS CIRASEA',
-          value: uptd['UPTD DAS CIRASEA'] || 0,
-          desc: 'Jumlah data yang sudah diinput',
-          cls: 'stat-3'
-        },
-        {
-          label: 'UPTD DAS CITARIK',
-          value: uptd['UPTD DAS CITARIK'] || 0,
-          desc: 'Jumlah data yang sudah diinput',
-          cls: 'stat-4'
-        }
-      ];
-
-      statsWrap.innerHTML = orderedCards.map(card => `
-        <div class="stat-card ${card.cls}">
-          <div class="stat-label">${escapeHtml(card.label)}</div>
-          <div class="stat-value">${escapeHtml(formatNumber(card.value))}</div>
-          <div class="stat-desc">${escapeHtml(card.desc)}</div>
-        </div>
-      `).join('');
-    }
-
     function renderRecent(rows) {
       const body = document.getElementById('recentBody');
       if (!rows.length) {
