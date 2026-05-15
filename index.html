@@ -1950,10 +1950,26 @@
             throw new Error(data.message || "Gagal memuat peta.");
           lastPoints = data.points || [];
           markerLayer.clearLayers();
-          lastPoints.forEach((p) => {
-            const marker = L.marker([p.lat, p.lng]).bindPopup(
-              `<div class="popup-title">${escapeHtml(p.namaDi)}</div><div class="popup-row"><b>No:</b> ${escapeHtml(p.no)}</div><div class="popup-row"><b>UPTD:</b> ${escapeHtml(p.uptd)}</div><div class="popup-row"><b>Usulan:</b> ${escapeHtml(p.usulan)}</div><div class="popup-row"><b>Kondisi:</b> ${escapeHtml(p.kondisi)}</div><div class="popup-row"><b>Kecamatan/Desa:</b> ${escapeHtml(p.kecamatan)} / ${escapeHtml(p.desa)}</div><div class="popup-row"><b>Koordinat:</b> ${escapeHtml(p.koordinat)}</div>${p.fotoUrl ? `<a class="popup-link" href="${escapeAttr(p.fotoUrl)}" target="_blank">Buka Foto</a>` : ""}`,
-            );
+         lastPoints.forEach((p) => {
+  const popupHtml = `
+    <div class="popup-title">${escapeHtml(p.namaDi)}</div>
+    <div class="popup-row"><b>No:</b> ${escapeHtml(p.no)}</div>
+    <div class="popup-row"><b>UPTD:</b> ${escapeHtml(p.uptd)}</div>
+    <div class="popup-row"><b>Usulan:</b> ${escapeHtml(p.usulan)}</div>
+    <div class="popup-row"><b>Kecamatan/Desa:</b> ${escapeHtml(p.kecamatan)} / ${escapeHtml(p.desa)}</div>
+    <div class="popup-row"><b>Kondisi:</b> ${escapeHtml(p.kondisi)}</div>
+    <div class="popup-row"><b>Koordinat:</b> ${escapeHtml(p.koordinat)}</div>
+    <div class="popup-row"><b>Nama P3A:</b> ${escapeHtml(p.namaP3A || "-")}</div>
+    ${
+      p.fotoUrl
+        ? `<a class="popup-link" href="${escapeAttr(p.fotoUrl)}" target="_blank">Buka Foto</a>`
+        : ""
+    }
+  `;
+
+  const marker = L.marker([p.lat, p.lng]).bindPopup(popupHtml);
+  marker.addTo(markerLayer);
+});
             marker.addTo(markerLayer);
           });
           renderInvalid(data.invalidCoordinates || []);
